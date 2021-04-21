@@ -4,27 +4,27 @@ requests > 2.1.0
 requests.packages.urllib3.disable_warnings()
 requests.get(url, verify=False)
 """
-import requests
-import json
+import os
+import time
+from datetime import date, datetime
 
-# 动态API请求的地址
-API_URL = 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?' \
-          'csrf=1150f93e4f2524a119d1aaf1b8d416e8' \
-          '&visitor_uid=276689059' \
-          '&host_uid=57276677' \
-          '&offset_dynamic_id=0' \
-          '&need_top=1' \
-          '&platform=web'
+from utils import *
 
 if __name__ == '__main__':
-    #
-    headers = {
-        'accept': 'application/json, text/javascript, */*; q=0.01',
-        'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
-        'accept-encoding': 'gzip',  # 这里不要填写br压缩
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36 Edg/89.0.774.77 '
-    }
-    response = requests.get(API_URL, headers=headers)
+    if os.environ.get('CORP_ID') is None \
+            or os.environ.get('CORP_SECRET') is None \
+            or os.environ.get('TO_USER') is None \
+            or os.environ.get('AGENT_ID') is None \
+            or os.environ.get('UP_ID') is None:
+        print('env init error')
+        exit(101)
+    corp_id = os.environ.get('CORP_ID')
+    corp_secret = os.environ.get('CORP_SECRET')
+    to_user = os.environ.get('TO_USER')
+    agent_id = os.environ.get('AGENT_ID')
+    up_id = os.environ.get('UP_ID')
+    response = requests.get(str.format(API_URL, up_id), headers=headers, proxies=proxies)
+    body = {}
     if response.status_code != 200:
         print('API 请求失败')
         exit(101)
@@ -39,5 +39,43 @@ if __name__ == '__main__':
         """
         for card in cards:
             c = card.get('desc')
-            if c.get('type') == 64:
-                print('url: ', 'https://www.bilibili.com/read/cv' + str(c.get('rid')))
+            _type_ = c.get('type')
+            _time_ = c.get('timestamp')
+            _now_ = int(time.time())
+            title = dict(json.loads(card.get('card'))).get('title')
+            banner_url = dict(json.loads(card.get('card'))).get('banner_url')
+            article_time = str(datetime.fromtimestamp(_time_))
+            if _type_ == 64 and date.fromtimestamp(_now_) == date.fromtimestamp(_time_):
+                print("今日推送文章(更新时间：%s) <a href='%s'>%s</a>" % (
+                    str(datetime.fromtimestamp(_time_)), URL_PREFIX + str(c.get('rid')), title))
+                body['title'] = title
+                body['banner'] = banner_url
+                body['url'] = URL_PREFIX + str(c.get('rid'))
+                break
+            elif _type_ == 64:
+                message = "今日暂无推送！请查看昨日推送文章(更新时间： %s) <a href='%s'>%s</a>" % (
+                    article_time, URL_PREFIX + str(c.get('rid')), title)
+                print(message)
+                body['title'] = title
+                body['banner'] = banner_url
+                body['url'] = URL_PREFIX + str(c.get('rid'))
+                break
+
+    push({
+        "chatid": "CHATID",
+        "msgtype": "news",
+        "touser": to_user,
+        "agentid": agent_id,
+        "news": {
+            "articles":
+                [
+                    {
+                        "title": "键圈消息",
+                        "description": body.get('title'),
+                        "url": body.get('url'),
+                        "picurl": body.get('banner')
+                    }
+                ]
+        },
+        "safe": 0
+    }, corp_id, corp_secret)

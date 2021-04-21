@@ -1,0 +1,32 @@
+name: bilibili api
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '*/1 * * * *'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    - name: run cmd
+      env:
+        CORP_ID: ${{ secrets.CORP_ID }}
+        CORP_SECRET: ${{ secrets.CORP_SECRET }}
+        TO_USER: ${{ secrets.TO_USER }}
+        AGENT_ID: ${{ secrets.AGENT_ID }}
+        UP_ID: ${{ secrets.UP_ID }}
+      run: python main.py
