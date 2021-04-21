@@ -12,7 +12,7 @@
 ## 特别声明
 <b>此脚本只用于学习、测试使用，请勿将此项目的任何内容用于商业或非法目的！本人概不负责！</b>
 
-### 实现准备
+### 准备
 
 - 需要先<a href='https://work.weixin.qq.com/wework_admin/register_wx?from=myhome'>注册企业微信（个人也能注册）</a>
 
@@ -22,13 +22,13 @@
 
 ### 推送参数配置
 
-Fork [此项目](https://github.com/xiaokexiang/bilibili_api) ，并添加如下`Secret`到**`Settings -> Secrets`**中：
+Fork [此项目](https://github.com/xiaokexiang/bilibili_api) ，并添加如下`Secret`到<b>`Settings -> Secrets`</b>中：
 
 |    参数     |                             作用                             |
 | :---------: | :----------------------------------------------------------: |
 |   CORP_ID   | <a href='https://work.weixin.qq.com/wework_admin/frame#profile'>我的企业ID</a> |
 | CORP_SECRET |                  上步创建的应用详情界面可查                  |
-|   TO_USER   |           通讯录界面可查（可为`@all`全部用户可知）           |
+|   TO_USER   |         通讯录界面可查（可为`@all`全部用户都会受到）         |
 |  AGENT_ID   |                  上步创建的应用详情界面可查                  |
 |    UP_ID    |                      通过浏览器请求可查                      |
 
@@ -46,4 +46,3 @@ Fork [此项目](https://github.com/xiaokexiang/bilibili_api) ，并添加如下
 ### 帮助文档
 
 - <a href='https://work.weixin.qq.com/api/doc/90000/90135/90248'>企业微信推送文档地址</a>
-
