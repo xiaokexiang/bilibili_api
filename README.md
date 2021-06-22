@@ -28,7 +28,7 @@ Fork [此项目](https://github.com/xiaokexiang/bilibili_api) ，并添加如下
 | :---------: | :----------------------------------------------------------: |
 |   CORP_ID   | <a href='https://work.weixin.qq.com/wework_admin/frame#profile'>我的企业ID</a> |
 | CORP_SECRET |                  上步创建的应用详情界面可查                  |
-|   TO_USER   |         通讯录界面可查（可为`@all`全部用户都会受到）         |
+|   TO_USER   |         通讯录界面可查（可为`@all`全部用户都会收到）         |
 |  AGENT_ID   |                  上步创建的应用详情界面可查                  |
 |    UP_ID    |                      通过浏览器请求可查                      |
 
