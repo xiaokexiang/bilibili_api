@@ -51,6 +51,20 @@ if __name__ == '__main__':
                 body['title'] = title
                 body['banner'] = banner_url
                 body['url'] = URL_PREFIX + str(c.get('rid'))
+                push({
+                    "chatid": "CHATID",
+                    "msgtype": "textcard",
+                    "touser": to_user,
+                    "agentid": agent_id,
+                    "textcard": {
+                        "title": "键圈昨日新闻",
+                        "description": "<div class=\"gray\">" + str(datetime.fromtimestamp(
+                            _time_)) + "</div><div class=\"normal\">今日暂无键圈新闻</div><div class=\"highlight\">可查看昨日键圈新闻</div>",
+                        "url": URL_PREFIX + str(c.get('rid')),
+                        "btntxt": "详情"
+                    },
+                    "safe": 0
+                }, corp_id, corp_secret)
                 break
             elif _type_ == 64:
                 message = "今日暂无推送！请查看昨日推送文章(更新时间： %s) <a href='%s'>%s</a>" % (
@@ -59,23 +73,22 @@ if __name__ == '__main__':
                 body['title'] = title
                 body['banner'] = banner_url
                 body['url'] = URL_PREFIX + str(c.get('rid'))
+                push({
+                    "chatid": "CHATID",
+                    "msgtype": "news",
+                    "touser": to_user,
+                    "agentid": agent_id,
+                    "news": {
+                        "articles":
+                            [
+                                {
+                                    "title": "键圈消息",
+                                    "description": body.get('title'),
+                                    "url": body.get('url'),
+                                    "picurl": body.get('banner')
+                                }
+                            ]
+                    },
+                    "safe": 0
+                }, corp_id, corp_secret)
                 break
-
-    push({
-        "chatid": "CHATID",
-        "msgtype": "news",
-        "touser": to_user,
-        "agentid": agent_id,
-        "news": {
-            "articles":
-                [
-                    {
-                        "title": "键圈消息",
-                        "description": body.get('title'),
-                        "url": body.get('url'),
-                        "picurl": body.get('banner')
-                    }
-                ]
-        },
-        "safe": 0
-    }, corp_id, corp_secret)
