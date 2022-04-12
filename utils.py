@@ -10,11 +10,16 @@ agentid: 应用ID（应用详情页面可找到） https://work.weixin.qq.com/we
 """
 import json
 
-from config import *
 import requests
 
+from config import *
 
-def push(news, corp_id, corp_secret):
+
+def push_bark(url, title, token):
+    requests.get('https://api.day.app/{0}/{1}?url={2}'.format(token, title, url))
+
+
+def push_wx(news, corp_id, corp_secret):
     print('prepare to push message!')
     push_news(news, get_access_token(corp_id, corp_secret))
 

@@ -15,7 +15,8 @@ if __name__ == '__main__':
             or os.environ.get('CORP_SECRET') is None \
             or os.environ.get('TO_USER') is None \
             or os.environ.get('AGENT_ID') is None \
-            or os.environ.get('UP_ID') is None:
+            or os.environ.get('UP_ID') is None \
+            or os.environ.get('BARK_TOKEN') is None:
         print('env init error')
         exit(101)
     corp_id = os.environ.get('CORP_ID')
@@ -23,6 +24,7 @@ if __name__ == '__main__':
     to_user = os.environ.get('TO_USER')
     agent_id = os.environ.get('AGENT_ID')
     up_id = os.environ.get('UP_ID')
+    bark_token = os.environ.get('BARK_TOKEN')
     response = requests.get(str.format(API_URL, up_id), headers=headers, proxies=proxies)
     body = {}
     if response.status_code != 200:
@@ -63,21 +65,4 @@ if __name__ == '__main__':
                 body['url'] = URL_PREFIX + str(c.get('rid'))
                 banner_title = '昨日键圈新闻'
                 break
-        push({
-            "chatid": "CHATID",
-            "msgtype": "news",
-            "touser": to_user,
-            "agentid": agent_id,
-            "news": {
-                "articles":
-                    [
-                        {
-                            "title": banner_title,
-                            "description": body.get('title'),
-                            "url": body.get('url'),
-                            "picurl": body.get('banner')
-                        }
-                    ]
-            },
-            "safe": 0
-        }, corp_id, corp_secret)
+            push_bark(body.get('url'), banner_title, bark_token)
