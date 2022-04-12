@@ -16,6 +16,7 @@ from config import *
 
 
 def push_bark(url, title, token):
+    print('bark url: ' + 'https://api.day.app/{0}/{1}?url={2}'.format(token, title, url))
     requests.get('https://api.day.app/{0}/{1}?url={2}'.format(token, title, url))
 
 
