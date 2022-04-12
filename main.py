@@ -65,4 +65,4 @@ if __name__ == '__main__':
                 body['url'] = URL_PREFIX + str(c.get('rid'))
                 banner_title = '昨日键圈新闻'
                 break
-            push_bark(body.get('url'), banner_title, bark_token)
+        push_bark(body.get('url'), banner_title, bark_token)
