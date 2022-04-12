@@ -31,4 +31,5 @@ jobs:
         TO_USER: ${{ secrets.TO_USER }}
         AGENT_ID: ${{ secrets.AGENT_ID }}
         UP_ID: ${{ secrets.UP_ID }}
+        BARK_TOKEN: ${{ secrets.BARK_TOKEN }}
       run: python main.py
